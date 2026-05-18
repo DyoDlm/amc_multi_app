@@ -1,0 +1,156 @@
+# ************************************************************************************************ #
+#                                                                                                  #
+#                                                _    _ _     _       _                      _     #
+#    pong.kv                                    | |  | | |   (_)     | |                    | |    #
+#                                               | |  | | |__  _  __ _| |__  ______ _ _ __ __| |    #
+#    By: whighzard <seitealexander@proton.me>   | |/\| | '_ \| |/ _` | '_ \|_  / _` | '__/ _` |    #
+#                                               \  /\  / | | | | (_| | | | |/ / (_| | | | (_| |    #
+#    Created: 2026/05/16 15:14:52 by whighzard   \/  \/|_| |_|_|\__, |_| |_/___\__,_|_|  \__,_|    #
+#    Updated: 2026/05/18 11:05:27 by whighzard                   __/ |                             #
+#                                                                                                  #
+# ************************************************************************************************ #
+
+#   Ajuster la couleur, le son et events de navigation
+<PongSettings>:
+   BoxLayout:
+      orientation: 'vertical'
+      size_hint: 1, 1
+
+      Label:
+         text: "Settings"
+         font_size: 50
+
+      Button:
+         text: "Resume"
+         on_press: root.manager.current = 'pong_game'
+    
+    #   TODO    #
+      Button:
+         text: "Restart"
+         on_press:
+            root.reset();
+            root.manager.current = 'pong_game'
+
+      Button:
+         text: "Quit"
+         on_press:
+            root.reset();
+            root.manager.current = 'menu'
+
+#   Interface generale
+<PongUI>:
+   BoxLayout:
+      orientation: 'vertical'
+      size_hint: 1, 1
+
+      Label:
+         text: "Jeu Pong"
+         font_size: 50
+
+      Button:
+         text: "Lancer le jeu"
+         on_press: root.manager.current = 'pong_game'
+
+      Button:
+         text: "Parametres"
+         on_press: root.manager.current = 'pong_settings'
+
+      Button:
+         text: "Retour au menu"
+         on_press: root.manager.current = 'menu'
+
+#   Todo: ajuster la balle a la taille de l'ecran
+<PongBall>:
+   size_hint: None, None
+   size: 50, 50
+   canvas:
+      Ellipse:
+         pos: self.pos
+         size: self.size
+
+#   Todo: Pareil que pour la balle
+<PongPaddle>:
+   size: 25, 200
+   canvas:
+      Rectangle:
+         pos: self.pos
+         size: self.size
+
+<BotPaddle>:
+   size: 25, 200
+   canvas:
+      Rectangle:
+         pos: self.pos
+         size: self.size
+
+<PongGame>:
+   ball: pong_ball
+   player1: player_left
+            # player
+   player2: player_right
+            # bot
+   #   NAVIGATION BETWEEN SCREENS #
+   canvas:
+      #   CENTRAL BAR   #
+      Rectangle:
+         pos: self.center_x - 5, 0
+         size: 10, self.height
+
+   #   SCORE J1    #
+   Label:
+      id: score1
+      font_size: 70
+      center_x: root.width / 4
+      top: root.top - 50
+      text: str(root.player1.score)
+
+   #   SCORE J2    #
+   Label:
+      id: score2
+      font_size: 70
+      center_x: root.width * 3 / 4
+      top: root.top - 50
+      text: str(root.player2.score)
+
+   #    CLICK ON CREEN TO SERV (invisible button) #
+   Button:
+      size_hint: 1, 1
+      opacity: 0
+      on_press: root.serve_ball()
+
+   PongBall:
+      id: pong_ball
+      size_hint: None, None
+      size: 50, 50
+      center: self.parent.center
+
+   PongPaddle:
+      id: player_left
+      size_hint: None, None
+      size: 25, 100
+      x: 20
+                # offset : 20px
+      center_y: self.parent.center_y
+
+   BotPaddle:
+      id: player_right
+      size_hint: None, None
+      size: 25, 100
+      x: root.width - self.width - 20
+                # offset : 20px
+      center_y: self.parent.center_y
+
+    #    SETTINGS (low left)
+   BoxLayout:
+      orientation: 'vertical'
+      size_hint: 0.2, 0.1
+      pos_hint: {'x': 0, 'y': 0}
+
+      Button:
+         text: "Settings"
+         size_hint: 1, 1
+         on_press:
+            root.reset_ball();
+            root.manager.current = 'pong_settings'
+
+
