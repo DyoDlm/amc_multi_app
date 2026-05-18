@@ -1,3 +1,15 @@
+# ************************************************************************************************ #
+#                                                                                                  #
+#                                                _    _ _     _       _                      _     #
+#    AccelerometerApp.py                        | |  | | |   (_)     | |                    | |    #
+#                                               | |  | | |__  _  __ _| |__  ______ _ _ __ __| |    #
+#    By: whighzard <seitealexander@proton.me>   | |/\| | '_ \| |/ _` | '_ \|_  / _` | '__/ _` |    #
+#                                               \  /\  / | | | | (_| | | | |/ / (_| | | | (_| |    #
+#    Created: 2026/05/18 13:33:30 by whighzard   \/  \/|_| |_|_|\__, |_| |_/___\__,_|_|  \__,_|    #
+#    Updated: 2026/05/18 13:33:31 by whighzard                   __/ |                             #
+#                                                                                                  #
+# ************************************************************************************************ #
+
 from imports import *
 from kivy.utils import platform
 from plyer import accelerometer
@@ -13,15 +25,13 @@ class AccelerometerApp(App):
     x = 0
     y = 0
     def on_start(self):
-        self.Te = 1.0 # periode d'echantillonage
+        self.Te = 1.0
         self.accState = False
 
         if platform == 'android':
             pass
-        ##self.root.ids.debug_label.text = 'Plateforme : Android'
         else:
             pass
-            #self.root.ids.debug_label.text = f'Plateforme : {platform} (simulation)'
     
     def generate_fake_acceleration(self):
         donnees = []
@@ -32,32 +42,22 @@ class AccelerometerApp(App):
     def update(self, dt):
         #   acquiert et affiche les donnees
         if platform != 'android':
-            print("Generating fake acc")
             acceleration = self.generate_fake_acceleration()
         else:
             acc = accelerometer.acceleration
-            print("Are we in android ?? ")
             if acc is None:
                 return 
             acceleration = [v if v is not None else 0.0 for v in acc[:3]]
-        #self.root.ids.acc_label.text = (
-        #        'X= %.2f\nY= %.2f\nZ= %.2f' % tuple(acceleration)
- #AttributeError: 'AccelerometerApp' object has no attribute 'Te'
-  #              )
-        self.x =  acceleration[0] #acceleration
+        self.x =  acceleration[0] 
         self.y = acceleration[1]
-        #print(self.x, self.y)
 
-    def start_accelerometer(self):
-         
+    def start_accelerometer(self): 
         Clock.schedule_interval(self.update, self.Te)
         if platform == 'android' or platform == 'linux':
             try:
                 accelerometer.enable()
-                #self.root.ids.debug_label.text = 'Accelerometre actif'
             except Exception as e:
                 pass
-            #   self.root.ids.debug_label.text = f'Erreur: {e}'
 
 
     def stop_accelerometer(self):
@@ -65,9 +65,8 @@ class AccelerometerApp(App):
         if platform == 'android' or platform == 'linux':
             try:
                 accelerometer.disable()
-                #self.root.ids.debug_label.text = 'Accelerometre inactif'
             except Exception as e:
-                pass #self.root.ids.debug_label.text = f'Erreur: {e}'
+                pass
 
     def start_stop(self):
         if (self.accState is False):
@@ -76,14 +75,11 @@ class AccelerometerApp(App):
         else:
             self.accState = False
             self.stop_accelerometer()
-        print("Button Start/Stop clicked")
 
     def get_x(self):
-        #print(f"X is : {self.X}")
         return self.x
 
     def get_y(self):
-        #print(f"Y is : {self.Y}")
         return self.y
 
 
